@@ -30,5 +30,10 @@
     "parserOptions": {
       "project": "./tsconfig.json"
     }
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "testTimeout": 120000
   }
 }
