@@ -4,12 +4,16 @@ query getMangas($select: SearchComic_Select) {
       page
       pages
     }
-    items { ...mangaData }
+    items {
+      ...mangaData
+    }
   }
 }
 
 query getManga($comicId: ID!) {
-  get_comicNode(id: $comicId) { ...mangaData }
+  get_comicNode(id: $comicId) {
+    ...mangaData
+  }
   get_comicChapterList(comicId: $comicId) {
     data {
       dateCreate

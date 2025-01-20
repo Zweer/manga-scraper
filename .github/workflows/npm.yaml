@@ -29,6 +29,12 @@ jobs:
 
       - run: npm test
 
+      - run: npm run build
+
+      - run: npm run lint
+
+      - run: corepack npm audit signatures
+
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

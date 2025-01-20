@@ -2,17 +2,44 @@
   "name": "@zweer/manga-scraper",
   "version": "0.0.1",
   "description": "A collection of scrapers for manga websites",
-  "main": "index.js",
-  "repository": "https://github.com/Zweer/manga-scraper.git",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "type": "commonjs",
+  "files": [
+    "lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zweer/manga-scraper.git"
+  },
   "author": "Niccolò Olivieri Achille <n.olivieriachille@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint .",
-    "format": "prettier . -w",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier . --check",
+    "lint:lockfile": "lockfile-lint",
+    "lint:engines": "ls-engines",
+    "lint:publish": "publint --strict",
+    "lint": "concurrently npm:lint:* --prefixColors auto",
     "check": "npm run lint && npm run format",
     "test": "jest",
     "test:debug": "jest --runInBand",
     "build": "tsc"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "lockfile-lint": {
+    "path": "package-lock.json",
+    "type": "npm",
+    "validate-https": true,
+    "allowed-hosts": [
+      "npm"
+    ]
+  },
+  "engines": {
+    "node": ">= 18.17"
   },
   "dependencies": {
     "axios": "^1.7.9",
@@ -23,8 +50,12 @@
     "@tsconfig/node22": "^22.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
+    "concurrently": "^9.1.2",
     "jest": "^29.7.0",
+    "lockfile-lint": "^4.14.0",
+    "ls-engines": "^0.9.3",
     "prettier": "^3.4.2",
+    "publint": "^0.3.2",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
