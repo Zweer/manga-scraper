@@ -22,7 +22,7 @@ describe('connectors -> manga park', () => {
     connector = new MangaParkConnector();
   });
 
-  it('should retrieve the bully comic', async () => {
+  it('should retrieve the illustrator comic', async () => {
     mockedAxios.post.mockResolvedValue({ data: getMangas });
 
     const mangas = await connector.getMangas('illustrator');
@@ -43,7 +43,7 @@ describe('connectors -> manga park', () => {
     });
   });
 
-  it('should retrieve the bully comic chapters', async () => {
+  it('should retrieve the illustrator comic chapters', async () => {
     mockedAxios.post.mockResolvedValue({ data: getMangas });
     const mangas = await connector.getMangas('illustrator');
     const manga = mangas.find((manga) => manga.id === '341963')!;
