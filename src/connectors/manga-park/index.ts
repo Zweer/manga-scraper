@@ -10,24 +10,6 @@ import { Manga, Status } from '../../interfaces/manga';
 import { MangaParkGetMangas } from './interfaces/getMangas';
 import { MangaParkGetManga } from './interfaces/getManga';
 
-function matchStatus(
-  status: MangaParkGetManga['data']['get_comicNode']['data']['originalStatus'],
-): Status {
-  switch (status) {
-    case 'ongoing':
-      return Status.Ongoing;
-
-    case 'completed':
-      return Status.Completed;
-
-    case null:
-      return Status.Unknown;
-
-    default:
-      throw new Error(`Unknown status: ${status}`);
-  }
-}
-
 const graphqlQuery = readFileSync(join(__dirname, 'queries.graphql'), 'utf8');
 
 export class MangaParkConnector extends Connector {
@@ -76,7 +58,7 @@ export class MangaParkConnector extends Connector {
           image: manga.data.urlCoverOri,
           url: `${MangaParkConnector.BASE_URL}${manga.data.urlPath}`,
           releasedAt: manga.data.dateCreate ? new Date(manga.data.dateCreate) : undefined,
-          status: matchStatus(manga.data.originalStatus),
+          status: this.matchStatus(manga.data.originalStatus),
           genres: manga.data.genres ?? [],
           score: manga.data.score_avg,
           chaptersCount: (manga.data.chaps_normal ?? 0) + (manga.data.chaps_others ?? 0),
@@ -115,5 +97,23 @@ export class MangaParkConnector extends Connector {
       releasedAt: chapter.data.dateCreate ? new Date(chapter.data.dateCreate) : undefined,
       images: chapter.data.imageFile?.urlList ?? [],
     }));
+  }
+
+  protected matchStatus(
+    status: MangaParkGetManga['data']['get_comicNode']['data']['originalStatus'],
+  ): Status {
+    switch (status) {
+      case 'ongoing':
+        return Status.Ongoing;
+
+      case 'completed':
+        return Status.Completed;
+
+      case null:
+        return Status.Unknown;
+
+      default:
+        throw new Error(`Unknown status: ${status}`);
+    }
   }
 }
