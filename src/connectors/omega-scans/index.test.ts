@@ -7,7 +7,7 @@ describe('connectors -> omega scans', () => {
     connector = new OmegaScansConnector();
   });
 
-  it('should retrieve the bully comic', async () => {
+  it('should retrieve the "My Illustrator" comic (+ others)', async () => {
     const mangas = await connector.getMangas('illustrator');
 
     expect(mangas).toHaveLength(1);
@@ -18,24 +18,34 @@ describe('connectors -> omega scans', () => {
       expect(manga).toHaveProperty('excerpt', expect.any(String));
       expect(manga).toHaveProperty('image', expect.any(String));
       expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
-      expect(manga).toHaveProperty('releasedAt');
+      expect(manga).toHaveProperty('releasedAt', new Date('2023-03-30T19:19:02.865Z'));
       expect(manga).toHaveProperty('status', 'Ongoing');
       expect(manga).toHaveProperty('genres', []);
       expect(manga).toHaveProperty('score', 0);
       expect(manga).toHaveProperty('chaptersCount', 71);
+      expect(manga).not.toHaveProperty('chapters');
     });
   });
 
   it(
-    'should retrieve the bully comic chapters',
+    'should retrieve the "My Illustrator" comic details',
     async () => {
-      const mangas = await connector.getMangas('illustrator');
-      const manga = mangas.find((manga) => manga.id === '2')!;
+      const manga = await connector.getManga('2');
 
-      const chapters = await connector.getChapters(manga);
+      expect(manga).toHaveProperty('id', '2');
+      expect(manga).toHaveProperty('title', 'My Illustrator');
+      expect(manga).toHaveProperty('excerpt', expect.any(String));
+      expect(manga).toHaveProperty('image', expect.any(String));
+      expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
+      expect(manga).toHaveProperty('releasedAt', new Date('2023-04-01T17:51:32.095Z'));
+      expect(manga).toHaveProperty('status', 'Ongoing');
+      expect(manga).toHaveProperty('genres', []);
+      expect(manga).toHaveProperty('score', 0);
+      expect(manga).toHaveProperty('chaptersCount', 71);
+      expect(manga).toHaveProperty('chapters');
 
-      expect(chapters).toHaveLength(71);
-      chapters.forEach((chapter) => {
+      expect(manga.chapters).toHaveLength(71);
+      manga.chapters.forEach((chapter) => {
         expect(chapter).toHaveProperty('id', expect.any(String));
         expect(chapter).toHaveProperty('title', expect.any(String));
         expect(chapter).toHaveProperty('index', expect.any(Number));

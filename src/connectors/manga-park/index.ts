@@ -28,8 +28,8 @@ export class MangaParkConnector extends Connector {
     });
   }
 
-  async getMangas(search?: string): Promise<Manga[]> {
-    const mangas: Manga[] = [];
+  async getMangas(search?: string): Promise<Omit<Manga, 'chapters'>[]> {
+    const mangas: Omit<Manga, 'chapters'>[] = [];
     const operationName = 'getMangas';
     const query = graphqlQuery;
     const variables = {
@@ -71,7 +71,7 @@ export class MangaParkConnector extends Connector {
     return mangas;
   }
 
-  async getChapters({ id }: Manga): Promise<Chapter[]> {
+  async getManga(id: string): Promise<Manga> {
     const operationName = 'getManga';
     const query = graphqlQuery;
     const variables = {
@@ -89,14 +89,30 @@ export class MangaParkConnector extends Connector {
       throw new Error('Comic not found');
     }
 
-    return data.data.get_comicChapterList.map((chapter) => ({
-      id: chapter.data.dname!,
-      title: chapter.data.title ?? chapter.data.dname!,
-      index: chapter.data.serial!,
-      url: chapter.data.urlPath!,
-      releasedAt: chapter.data.dateCreate ? new Date(chapter.data.dateCreate) : undefined,
-      images: chapter.data.imageFile?.urlList ?? [],
-    }));
+    return {
+      id: data.data.get_comicNode.data.id,
+      title: data.data.get_comicNode.data.name!,
+      excerpt: data.data.get_comicNode.data.summary,
+      image: data.data.get_comicNode.data.urlCoverOri,
+      url: `${MangaParkConnector.BASE_URL}${data.data.get_comicNode.data.urlPath}`,
+      releasedAt: data.data.get_comicNode.data.dateCreate
+        ? new Date(data.data.get_comicNode.data.dateCreate)
+        : undefined,
+      status: this.matchStatus(data.data.get_comicNode.data.originalStatus),
+      genres: data.data.get_comicNode.data.genres ?? [],
+      score: data.data.get_comicNode.data.score_avg,
+      chaptersCount:
+        (data.data.get_comicNode.data.chaps_normal ?? 0) +
+        (data.data.get_comicNode.data.chaps_others ?? 0),
+      chapters: data.data.get_comicChapterList.map((chapter) => ({
+        id: chapter.data.dname!,
+        title: chapter.data.title ?? chapter.data.dname!,
+        index: chapter.data.serial!,
+        url: chapter.data.urlPath!,
+        releasedAt: chapter.data.dateCreate ? new Date(chapter.data.dateCreate) : undefined,
+        images: chapter.data.imageFile?.urlList ?? [],
+      })),
+    };
   }
 
   protected matchStatus(

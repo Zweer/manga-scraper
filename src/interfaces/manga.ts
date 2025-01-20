@@ -19,5 +19,5 @@ export interface Manga {
   genres: string[];
   score?: number;
   chaptersCount: number;
-  chapters?: Chapter[];
+  chapters: Chapter[];
 }

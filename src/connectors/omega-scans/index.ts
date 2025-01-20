@@ -7,8 +7,11 @@ import { Chapter } from '../../interfaces/chapter';
 import { OmegaScansGetMangas } from './interfaces/getMangas';
 import { OmegaScansGetChapters } from './interfaces/getChapters';
 import { OmegaScansGetChapterDetails } from './interfaces/getChapterDetails';
+import { OmegaScansGetManga } from './interfaces/getManga';
 
 export class OmegaScansConnector extends Connector {
+  static readonly BASE_URL = 'https://omegascans.org';
+
   constructor() {
     super();
 
@@ -17,8 +20,8 @@ export class OmegaScansConnector extends Connector {
     });
   }
 
-  async getMangas(search?: string): Promise<Manga[]> {
-    const mangas: Manga[] = [];
+  async getMangas(search?: string): Promise<Omit<Manga, 'chapters'>[]> {
+    const mangas: Omit<Manga, 'chapters'>[] = [];
 
     for (let page = 1, run = true; run; page += 1) {
       const tmpMangas = await this.getMangasFromPage(search, page, true);
@@ -32,11 +35,20 @@ export class OmegaScansConnector extends Connector {
     return mangas;
   }
 
-  async getChapters({ id }: Manga): Promise<Chapter[]> {
+  async getManga(id: string): Promise<Manga> {
     const chapters: Chapter[] = [];
+    let mangaSlug = '';
 
     for (let page = 1, run = true; run; page += 1) {
-      const tmpChapters = await this.getChaptersFromPage(id, page);
+      const { chapters: tmpChapters, mangaSlug: tmpMangaSlug } = await this.getChaptersFromPage(
+        id,
+        page,
+      );
+
+      if (!mangaSlug) {
+        mangaSlug = tmpMangaSlug;
+      }
+
       if (tmpChapters.length > 0) {
         chapters.push(...tmpChapters);
       } else {
@@ -44,14 +56,28 @@ export class OmegaScansConnector extends Connector {
       }
     }
 
-    return chapters;
+    const { data } = await this.request.get<OmegaScansGetManga>(`/series/${mangaSlug}`);
+
+    return {
+      id: data.id.toString(),
+      title: data.title,
+      excerpt: data.description,
+      image: data.thumbnail,
+      url: `${OmegaScansConnector.BASE_URL}/series/${data.series_slug}`,
+      releasedAt: new Date(data.seasons[0].created_at),
+      status: this.matchStatus(data.status),
+      genres: [],
+      score: data.rating ?? 0,
+      chaptersCount: parseInt(data.meta.chapters_count, 10),
+      chapters,
+    };
   }
 
   protected async getMangasFromPage(
     search: string | undefined,
     page: number,
     adult: boolean,
-  ): Promise<Manga[]> {
+  ): Promise<Omit<Manga, 'chapters'>[]> {
     const { data } = await this.request.get<OmegaScansGetMangas>('/query', {
       params: {
         perPage: 100,
@@ -66,7 +92,7 @@ export class OmegaScansConnector extends Connector {
       title: manga.title,
       excerpt: manga.description,
       image: manga.thumbnail,
-      url: `https://omegascans.org/series/${manga.series_slug}`,
+      url: `${OmegaScansConnector.BASE_URL}/series/${manga.series_slug}`,
       releasedAt: new Date(manga.created_at),
       status: this.matchStatus(manga.status),
       genres: [],
@@ -75,7 +101,10 @@ export class OmegaScansConnector extends Connector {
     }));
   }
 
-  protected async getChaptersFromPage(id: string, page: number): Promise<Chapter[]> {
+  protected async getChaptersFromPage(
+    id: string,
+    page: number,
+  ): Promise<{ chapters: Chapter[]; mangaSlug: string }> {
     const { data } = await this.request.get<OmegaScansGetChapters>('/chapter/query', {
       params: {
         perPage: 100,
@@ -84,18 +113,23 @@ export class OmegaScansConnector extends Connector {
       },
     });
 
-    return data.data.reduce(
+    let mangaSlug = '';
+    const chapters = await data.data.reduce(
       async (promiseChapters, chapter) => {
         const chapters = await promiseChapters;
         const { data } = await this.request.get<OmegaScansGetChapterDetails>(
           `/chapter/${chapter.series.series_slug}/${chapter.chapter_slug}`,
         );
 
+        if (!mangaSlug) {
+          mangaSlug = chapter.series.series_slug;
+        }
+
         chapters.push({
           id: chapter.id.toString(),
           title: chapter.chapter_name,
           index: parseFloat(data.chapter.index),
-          url: `https://omegascans.org/series/${chapter.series.series_slug}/${chapter.chapter_slug}`,
+          url: `${OmegaScansConnector.BASE_URL}/series/${chapter.series.series_slug}/${chapter.chapter_slug}`,
           images: data.chapter.chapter_data.images,
         });
 
@@ -103,6 +137,11 @@ export class OmegaScansConnector extends Connector {
       },
       Promise.resolve([] as Chapter[]),
     );
+
+    return {
+      chapters,
+      mangaSlug,
+    };
   }
 
   protected matchStatus(status: OmegaScansGetMangas['data'][number]['status']): Status {
