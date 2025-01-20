@@ -7,33 +7,29 @@
   "author": "Niccolò Olivieri Achille <n.olivieriachille@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint . --ext .js,.ts --fix",
-    "format": "prettier --write \"**/*.{js,ts,json,md,yml}\" \".editorconfig\" \"LICENSE\""
+    "lint": "eslint .",
+    "format": "prettier . -w",
+    "check": "npm run lint && npm run format",
+    "test": "jest",
+    "build": "tsc"
   },
   "dependencies": {
-    "axios": "^0.21.1",
-    "cheerio": "^1.0.0-rc.5"
+    "axios": "^1.7.9",
+    "cheerio": "^1.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.20",
-    "@types/node": "^14.14.22",
-    "@typescript-eslint/eslint-plugin": "4.4.1",
-    "eslint-config-airbnb-typescript": "^12.0.0",
-    "eslint-plugin-import": "2.22.0",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
-    "ts-jest": "^26.4.4",
-    "typescript": "^4.1.3"
-  },
-  "eslintConfig": {
-    "extends": "airbnb-typescript/base",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    }
+    "@shopify/eslint-plugin": "^46.0.0",
+    "@tsconfig/node22": "^22.0.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "^22.10.7",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
   },
   "jest": {
     "preset": "ts-jest",
-    "testEnvironment": "node",
-    "testTimeout": 120000
+    "testEnvironment": "node"
   }
 }
