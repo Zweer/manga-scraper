@@ -26,7 +26,8 @@
     "test:debug": "jest --runInBand",
     "clean": "rimraf --glob ./{lib,tests}/**/*.{d.ts,js}",
     "prebuild": "npm run clean",
-    "build": "tsc"
+    "build": "tsc",
+    "release": "semantic-release"
   },
   "publishConfig": {
     "access": "public",
@@ -40,6 +41,16 @@
       "npm"
     ]
   },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
+  },
   "engines": {
     "node": ">= 18.17"
   },
@@ -48,6 +59,8 @@
     "cheerio": "^1.0.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@shopify/eslint-plugin": "^46.0.0",
     "@tsconfig/node22": "^22.0.0",
     "@types/jest": "^29.5.14",
@@ -59,6 +72,7 @@
     "prettier": "^3.4.2",
     "publint": "^0.3.2",
     "rimraf": "^6.0.1",
+    "semantic-release": "^24.2.1",
     "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
