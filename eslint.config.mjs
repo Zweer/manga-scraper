@@ -22,6 +22,9 @@ const config = [
       'no-warning-comments': 'off',
     },
   },
+  {
+    ignores: ['**/*.js', '**/*.d.ts'],
+  },
 ];
 
 export default config;
