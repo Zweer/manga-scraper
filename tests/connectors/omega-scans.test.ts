@@ -1,4 +1,4 @@
-import { OmegaScansConnector } from '.';
+import { OmegaScansConnector } from '../../lib/connectors/omega-scans';
 
 describe('connectors -> omega scans', () => {
   let connector: OmegaScansConnector;

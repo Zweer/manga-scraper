@@ -1,4 +1,4 @@
-import { MangaParkConnector } from '.';
+import { MangaParkConnector } from '../../lib/connectors/manga-park';
 
 describe('connectors -> manga park', () => {
   let connector: MangaParkConnector;
