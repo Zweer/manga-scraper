@@ -68,7 +68,7 @@ export class OmegaScansConnector extends Connector {
       status: this.matchStatus(data.status),
       genres: [],
       score: data.rating ?? 0,
-      chaptersCount: parseInt(data.meta.chapters_count, 10),
+      chaptersCount: chapters.length,
       chapters,
     };
   }
@@ -97,7 +97,7 @@ export class OmegaScansConnector extends Connector {
       status: this.matchStatus(manga.status),
       genres: [],
       score: manga.rating ?? 0,
-      chaptersCount: parseInt(manga.meta.chapters_count, 10),
+      chaptersCount: manga.free_chapters.length,
     }));
   }
 
@@ -123,6 +123,10 @@ export class OmegaScansConnector extends Connector {
 
         if (!mangaSlug) {
           mangaSlug = chapter.series.series_slug;
+        }
+
+        if (data.chapter.price) {
+          return chapters;
         }
 
         chapters.push({
