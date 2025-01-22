@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Zweer/manga-scraper/compare/v1.3.0...v1.4.0) (2025-01-22)
+
+
+### Features
+
+* :white_check_mark: Fixed tests + fixed chapter count ([3a5ee92](https://github.com/Zweer/manga-scraper/commit/3a5ee92cb990d02c8e5751c4d2098c6ce5d7dde8))
+
 # [1.3.0](https://github.com/Zweer/manga-scraper/compare/v1.2.0...v1.3.0) (2025-01-21)
 
 ### Features
