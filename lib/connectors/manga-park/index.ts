@@ -4,7 +4,6 @@ import { join } from 'path';
 import axios from 'axios';
 
 import { Connector } from '../abstract';
-import { Chapter } from '../../interfaces/chapter';
 import { Manga, Status } from '../../interfaces/manga';
 
 import { MangaParkGetMangas } from './interfaces/getMangas';
