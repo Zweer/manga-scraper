@@ -1,6 +1,6 @@
 {
   "name": "@zweer/manga-scraper",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A collection of scrapers for manga websites",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
