@@ -47,11 +47,11 @@ describe('connectors -> manga park', () => {
       'drama',
       'sm_bdsm',
     ]);
-    expect(manga).toHaveProperty('score', 8.345132743362832);
-    expect(manga).toHaveProperty('chaptersCount', 64);
+    expect(manga).toHaveProperty('score', 8.350877192982455);
+    expect(manga).toHaveProperty('chaptersCount', 73);
     expect(manga).toHaveProperty('chapters');
 
-    expect(manga.chapters).toHaveLength(64);
+    expect(manga.chapters).toHaveLength(73);
     manga.chapters.forEach((chapter) => {
       expect(chapter).toHaveProperty('id', expect.any(String));
       expect(chapter).toHaveProperty('title', expect.any(String));

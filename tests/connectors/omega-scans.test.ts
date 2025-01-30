@@ -22,7 +22,7 @@ describe('connectors -> omega scans', () => {
       expect(manga).toHaveProperty('status', 'Ongoing');
       expect(manga).toHaveProperty('genres', []);
       expect(manga).toHaveProperty('score', 0);
-      expect(manga).toHaveProperty('chaptersCount', 71);
+      expect(manga).toHaveProperty('chaptersCount', 73);
       expect(manga).not.toHaveProperty('chapters');
     });
   });
@@ -41,10 +41,10 @@ describe('connectors -> omega scans', () => {
       expect(manga).toHaveProperty('status', 'Ongoing');
       expect(manga).toHaveProperty('genres', []);
       expect(manga).toHaveProperty('score', 0);
-      expect(manga).toHaveProperty('chaptersCount', 71);
+      expect(manga).toHaveProperty('chaptersCount', 73);
       expect(manga).toHaveProperty('chapters');
 
-      expect(manga.chapters).toHaveLength(71);
+      expect(manga.chapters).toHaveLength(73);
       manga.chapters.forEach((chapter) => {
         expect(chapter).toHaveProperty('id', expect.any(String));
         expect(chapter).toHaveProperty('title', expect.any(String));
