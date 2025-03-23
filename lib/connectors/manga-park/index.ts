@@ -4,10 +4,13 @@ import { join } from 'path';
 import axios from 'axios';
 
 import { Connector } from '../abstract';
+import { Chapter } from '../../interfaces/chapter';
 import { Manga, Status } from '../../interfaces/manga';
 
+import { GetChapter } from './interfaces/getChapter';
+import { GetChapters } from './interfaces/getChapters';
+import { GetManga } from './interfaces/getManga';
 import { MangaParkGetMangas } from './interfaces/getMangas';
-import { MangaParkGetManga } from './interfaces/getManga';
 
 const graphqlQuery = readFileSync(join(__dirname, 'queries.graphql'), 'utf8');
 
@@ -27,8 +30,8 @@ export class MangaParkConnector extends Connector {
     });
   }
 
-  async getMangas(search?: string): Promise<Omit<Manga, 'chapters'>[]> {
-    const mangas: Omit<Manga, 'chapters'>[] = [];
+  async getMangas(search?: string): Promise<Manga[]> {
+    const mangas: Manga[] = [];
     const operationName = 'getMangas';
     const query = graphqlQuery;
     const variables = {
@@ -49,20 +52,7 @@ export class MangaParkConnector extends Connector {
         variables,
       });
 
-      mangas.push(
-        ...data.data.get_searchComic.items.map((manga) => ({
-          id: manga.data.id,
-          title: manga.data.name!,
-          excerpt: manga.data.summary,
-          image: manga.data.urlCoverOri,
-          url: `${MangaParkConnector.BASE_URL}${manga.data.urlPath}`,
-          releasedAt: manga.data.dateCreate ? new Date(manga.data.dateCreate) : undefined,
-          status: this.matchStatus(manga.data.originalStatus),
-          genres: manga.data.genres ?? [],
-          score: manga.data.score_avg,
-          chaptersCount: (manga.data.chaps_normal ?? 0) + (manga.data.chaps_others ?? 0),
-        })),
-      );
+      mangas.push(...data.data.get_searchComic.items.map((manga) => this.buildManga(manga.data)));
 
       run = page < data.data.get_searchComic.paging.pages;
     }
@@ -74,11 +64,10 @@ export class MangaParkConnector extends Connector {
     const operationName = 'getManga';
     const query = graphqlQuery;
     const variables = {
-      getComicNodeId: id,
       comicId: id,
     };
 
-    const { data } = await this.request.post<MangaParkGetManga>('/', {
+    const { data } = await this.request.post<GetManga>('/', {
       operationName,
       query,
       variables,
@@ -88,41 +77,90 @@ export class MangaParkConnector extends Connector {
       throw new Error('Comic not found');
     }
 
+    return this.buildManga(data.data.get_comicNode.data);
+  }
+
+  async getChapters(comicId: string): Promise<Chapter[]> {
+    const operationName = 'getChapters';
+    const query = graphqlQuery;
+    const variables = { comicId };
+
+    const { data } = await this.request.post<GetChapters>('/', {
+      operationName,
+      query,
+      variables,
+    });
+
+    if (!data.data.get_comicChapterList) {
+      throw new Error('Comic not found');
+    }
+
+    return data.data.get_comicChapterList.map((chapter) => this.buildChapter(chapter.data));
+  }
+
+  async getChapter(chapterId: string): Promise<Chapter> {
+    const operationName = 'getChapter';
+    const query = graphqlQuery;
+    const variables = { chapterId };
+
+    const { data } = await this.request.post<GetChapter>('/', {
+      operationName,
+      query,
+      variables,
+    });
+
+    if (!data.data.get_chapterNode.data) {
+      throw new Error('Chapter not found');
+    }
+
+    return this.buildChapter(data.data.get_chapterNode.data);
+  }
+
+  protected buildManga(manga: GetManga['data']['get_comicNode']['data']): Manga {
     return {
-      id: data.data.get_comicNode.data.id,
-      title: data.data.get_comicNode.data.name!,
-      excerpt: data.data.get_comicNode.data.summary,
-      image: data.data.get_comicNode.data.urlCoverOri,
-      url: `${MangaParkConnector.BASE_URL}${data.data.get_comicNode.data.urlPath}`,
-      releasedAt: data.data.get_comicNode.data.dateCreate
-        ? new Date(data.data.get_comicNode.data.dateCreate)
-        : undefined,
-      status: this.matchStatus(data.data.get_comicNode.data.originalStatus),
-      genres: data.data.get_comicNode.data.genres ?? [],
-      score: data.data.get_comicNode.data.score_avg,
-      chaptersCount:
-        (data.data.get_comicNode.data.chaps_normal ?? 0) +
-        (data.data.get_comicNode.data.chaps_others ?? 0),
-      chapters: data.data.get_comicChapterList.map((chapter) => ({
-        id: chapter.data.dname!,
-        title: chapter.data.title ?? chapter.data.dname!,
-        index: chapter.data.serial!,
-        url: chapter.data.urlPath!,
-        releasedAt: chapter.data.dateCreate ? new Date(chapter.data.dateCreate) : undefined,
-        images: chapter.data.imageFile?.urlList ?? [],
-      })),
+      id: manga.id,
+      slug: manga.slug!,
+      title: manga.name!,
+      excerpt: manga.summary,
+      image: manga.urlCoverOri,
+      url: `${MangaParkConnector.BASE_URL}${manga.urlPath}`,
+      releasedAt: manga.dateCreate ? new Date(manga.dateCreate) : undefined,
+      status: this.matchStatus(manga.originalStatus),
+      genres: manga.genres ?? [],
+      score: Math.round((manga.score_avg ?? 0) * 100) / 100,
+      chaptersCount: (manga.chaps_normal ?? 0) + (manga.chaps_others ?? 0),
+    };
+  }
+
+  protected buildChapter(chapter: GetChapter['data']['get_chapterNode']['data']): Chapter {
+    return {
+      id: chapter.id,
+      name: chapter.dname!,
+      slug: chapter.urlPath?.split('/').pop()!,
+      title: chapter.title,
+      index: chapter.serial!,
+      url: `${MangaParkConnector.BASE_URL}${chapter.urlPath!}`,
+      releasedAt: chapter.dateCreate ? new Date(chapter.dateCreate) : undefined,
+      images: chapter.imageFile?.urlList ?? [],
     };
   }
 
   protected matchStatus(
-    status: MangaParkGetManga['data']['get_comicNode']['data']['originalStatus'],
+    status: GetManga['data']['get_comicNode']['data']['originalStatus'],
   ): Status {
     switch (status) {
       case 'ongoing':
+      case 'pending':
         return Status.Ongoing;
 
       case 'completed':
         return Status.Completed;
+
+      case 'hiatus':
+        return Status.Hiatus;
+
+      case 'cancelled':
+        return Status.Cancelled;
 
       case null:
         return Status.Unknown;

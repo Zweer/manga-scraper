@@ -1,5 +1,3 @@
-import { Chapter } from './chapter';
-
 export enum Status {
   Ongoing = 'Ongoing',
   Completed = 'Completed',
@@ -10,7 +8,8 @@ export enum Status {
 
 export interface Manga {
   id: string;
-  title: string;
+  slug: string;
+  title?: string;
   excerpt?: string;
   image?: string;
   url: string;
@@ -19,5 +18,4 @@ export interface Manga {
   genres: string[];
   score?: number;
   chaptersCount: number;
-  chapters: Chapter[];
 }

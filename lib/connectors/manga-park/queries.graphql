@@ -14,18 +14,17 @@ query getManga($comicId: ID!) {
   get_comicNode(id: $comicId) {
     ...mangaData
   }
+}
+
+query getChapters($comicId: ID!) {
   get_comicChapterList(comicId: $comicId) {
-    data {
-      dateCreate
-      dname
-      imageFile {
-        urlList
-      }
-      serial
-      sfw_result
-      title
-      urlPath
-    }
+    ...chapterData
+  }
+}
+
+query getChapter($chapterId: ID!) {
+  get_chapterNode(id: $chapterId) {
+    ...chapterData
   }
 }
 
@@ -49,6 +48,21 @@ fragment mangaData on ComicNode {
     urlCover600
     urlCover900
     urlCoverOri
+    urlPath
+  }
+}
+
+fragment chapterData on ChapterNode {
+  data {
+    dateCreate
+    dname
+    id
+    imageFile {
+      urlList
+    }
+    serial
+    sfw_result
+    title
     urlPath
   }
 }

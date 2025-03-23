@@ -1,4 +1,4 @@
-import { MangaParkCommonData } from './commonData';
+import { CommonManga } from './getManga';
 
 export interface MangaParkGetMangas {
   data: {
@@ -7,7 +7,7 @@ export interface MangaParkGetMangas {
         page: number;
         pages: number;
       };
-      items: MangaParkCommonData[];
+      items: CommonManga[];
     };
   };
 }
