@@ -1,9 +1,8 @@
 # [1.5.0](https://github.com/Zweer/manga-scraper/compare/v1.4.0...v1.5.0) (2025-01-30)
 
-
 ### Features
 
-* :package: Removing ts files from npm package ([4ed7c09](https://github.com/Zweer/manga-scraper/commit/4ed7c09b1c4ce8554323121814396e682b81fa58))
+- :package: Removing ts files from npm package ([4ed7c09](https://github.com/Zweer/manga-scraper/commit/4ed7c09b1c4ce8554323121814396e682b81fa58))
 
 # [1.4.0](https://github.com/Zweer/manga-scraper/compare/v1.3.0...v1.4.0) (2025-01-22)
 
