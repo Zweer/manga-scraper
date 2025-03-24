@@ -1,3 +1,16 @@
+# [2.0.0](https://github.com/Zweer/manga-scraper/compare/v1.5.0...v2.0.0) (2025-03-24)
+
+
+### Features
+
+* **manga-park:** :zap: Added `getChapters` and `getChapter` ([4311d23](https://github.com/Zweer/manga-scraper/commit/4311d238cc4468b5b2f86e6a8b540eee2ede072c))
+* **omega-scans:** :sparkles: Moved to the new interface ([08403b3](https://github.com/Zweer/manga-scraper/commit/08403b3ddd9f0c4f74b02f863573859f28c4c3ba))
+
+
+### BREAKING CHANGES
+
+* **omega-scans:** Using a new abstract class
+
 # [1.5.0](https://github.com/Zweer/manga-scraper/compare/v1.4.0...v1.5.0) (2025-01-30)
 
 ### Features
