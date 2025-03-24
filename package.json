@@ -1,7 +1,7 @@
 {
   "name": "@zweer/manga-scraper",
   "type": "commonjs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A collection of scrapers for manga websites",
   "author": "Niccolò Olivieri Achille <n.olivieriachille@gmail.com>",
   "license": "MIT",

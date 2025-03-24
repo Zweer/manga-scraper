@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/Zweer/manga-scraper/compare/v2.0.0...v2.0.1) (2025-03-24)
+
+
+### Performance Improvements
+
+* :arrow_up: Fixed vulnerabilities + moved away from shopify ([a4bd6d1](https://github.com/Zweer/manga-scraper/commit/a4bd6d1ab39358b635fd6494a9366e8dfdaeecbb))
+
 # [2.0.0](https://github.com/Zweer/manga-scraper/compare/v1.5.0...v2.0.0) (2025-03-24)
 
 
