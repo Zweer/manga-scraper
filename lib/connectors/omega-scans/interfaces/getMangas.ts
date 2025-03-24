@@ -1,4 +1,4 @@
-import { CommonMeta } from './commonMeta';
+import type { CommonMeta } from './commonMeta';
 
 interface Chapter {
   id: number;

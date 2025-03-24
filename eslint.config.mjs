@@ -1,30 +1,25 @@
-import shopifyEslintPlugin from '@shopify/eslint-plugin';
+import antfu from '@antfu/eslint-config';
 
-const config = [
-  ...shopifyEslintPlugin.configs.node,
-  ...shopifyEslintPlugin.configs.typescript,
-  ...shopifyEslintPlugin.configs.prettier,
-  ...shopifyEslintPlugin.configs['typescript-type-checking'],
-  {
-    languageOptions: {
-      parserOptions: {
-        project: 'tsconfig.json',
-      },
-    },
-    rules: {
-      'no-console': 'off',
-      'no-process-env': 'off',
-      '@typescript-eslint/naming-convention': 'off',
-      'line-comment-position': 'off',
-      'import/no-cycle': 'off',
-      '@typescript-eslint/no-unnecessary-condition': 'off',
-      'prettier/prettier': 'warn',
-      'no-warning-comments': 'off',
-    },
+export default antfu({
+  stylistic: {
+    semi: true,
   },
-  {
-    ignores: ['**/*.js', '**/*.d.ts'],
+  typescript: {
+    tsconfigPath: 'tsconfig.json',
   },
-];
-
-export default config;
+  rules: {
+    'perfectionist/sort-imports': ['error', {
+      groups: [
+        'type',
+        ['parent-type', 'sibling-type', 'index-type', 'internal-type'],
+        'builtin',
+        'external',
+        'internal',
+        ['parent', 'sibling', 'index'],
+        'side-effect',
+        'object',
+        'unknown',
+      ],
+    }],
+  },
+});

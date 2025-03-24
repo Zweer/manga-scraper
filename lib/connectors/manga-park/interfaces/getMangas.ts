@@ -1,4 +1,4 @@
-import { CommonManga } from './getManga';
+import type { CommonManga } from './getManga';
 
 export interface MangaParkGetMangas {
   data: {

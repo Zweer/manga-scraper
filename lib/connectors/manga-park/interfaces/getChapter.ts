@@ -1,5 +1,5 @@
 export interface CommonChapter {
-  data: {
+  data?: {
     dateCreate?: number;
     dname?: string;
     id: string;

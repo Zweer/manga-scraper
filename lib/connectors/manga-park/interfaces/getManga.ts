@@ -1,5 +1,13 @@
+export enum OriginalStatus {
+  ONGOING = 'ongoing',
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  HIATUS = 'hiatus',
+  CANCELLED = 'cancelled',
+}
+
 export interface CommonManga {
-  data: {
+  data?: {
     artists?: string[];
     authors?: string[];
     chaps_normal?: number;
@@ -9,7 +17,7 @@ export interface CommonManga {
     genres?: string[];
     id: string;
     name?: string;
-    originalStatus: 'ongoing' | 'pending' | 'completed' | 'hiatus' | 'cancelled';
+    originalStatus: OriginalStatus;
     score_avg?: number;
     sfw_result?: boolean;
     slug?: string;

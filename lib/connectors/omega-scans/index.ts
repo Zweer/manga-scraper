@@ -1,13 +1,16 @@
+import type { Chapter } from '../../interfaces/chapter';
+import type { Manga } from '../../interfaces/manga';
+import type { GetChapterDetails } from './interfaces/getChapterDetails';
+import type { GetChapters } from './interfaces/getChapters';
+import type { GetManga } from './interfaces/getManga';
+import type { GetMangas } from './interfaces/getMangas';
+
+import process from 'node:process';
+
 import axios from 'axios';
 
+import { Status } from '../../interfaces/manga';
 import { Connector } from '../abstract';
-import { Manga, Status } from '../../interfaces/manga';
-import { Chapter } from '../../interfaces/chapter';
-
-import { GetMangas } from './interfaces/getMangas';
-import { GetChapters } from './interfaces/getChapters';
-import { GetChapterDetails } from './interfaces/getChapterDetails';
-import { GetManga } from './interfaces/getManga';
 
 export class OmegaScansConnector extends Connector {
   static readonly BASE_URL = 'https://omegascans.org';
@@ -38,7 +41,7 @@ export class OmegaScansConnector extends Connector {
       }
 
       mangas.push(
-        ...data.data.map((manga) => ({
+        ...data.data.map(manga => ({
           id: manga.id.toString(),
           slug: manga.series_slug,
           title: manga.title,
@@ -72,7 +75,7 @@ export class OmegaScansConnector extends Connector {
       status: this.matchStatus(manga.status),
       genres: [],
       score: manga.rating ?? 0,
-      chaptersCount: parseInt(manga.meta.chapters_count, 10),
+      chaptersCount: Number.parseInt(manga.meta.chapters_count, 10),
     };
   }
 
@@ -123,7 +126,7 @@ export class OmegaScansConnector extends Connector {
         return Status.Cancelled;
 
       default:
-        throw new Error(`Unknown status: ${status}`);
+        throw new Error(`Unknown status: ${status as string}`);
     }
   }
 
@@ -186,7 +189,7 @@ export class OmegaScansConnector extends Connector {
 
   protected async getChapterSlug(mangaId: string, chapterId: string): Promise<string> {
     const chapters = await this.getPartialChapters(mangaId);
-    const chapter = chapters.find((chapter) => chapter.id.toString() === chapterId);
+    const chapter = chapters.find(chapter => chapter.id.toString() === chapterId);
 
     if (!chapter) {
       throw new Error('Chapter not found');
@@ -201,7 +204,7 @@ export class OmegaScansConnector extends Connector {
       name: data.chapter.chapter_name,
       slug: data.chapter.chapter_slug,
       title: data.chapter.chapter_title!,
-      index: parseFloat(data.chapter.index),
+      index: Number.parseFloat(data.chapter.index),
       url: `${OmegaScansConnector.BASE_URL}/series/${data.chapter.series.series_slug}/${data.chapter.chapter_slug}`,
       releasedAt: new Date(data.chapter.created_at),
       images: data.chapter.chapter_data.images,

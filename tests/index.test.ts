@@ -1,4 +1,6 @@
-import { Chapter, ConnectorNames, Manga, Status, connectors } from '../lib';
+import type { Chapter, ConnectorNames, Manga } from '../lib';
+
+import { connectors, Status } from '../lib';
 import { Connector } from '../lib/connectors/abstract';
 
 describe('main', () => {
@@ -78,6 +80,6 @@ describe('main', () => {
 
     expect(connectorNames).toHaveLength(2);
     expect(connectorNames).toEqual(expectedConnectorNames);
-    connectorsValues.forEach((connector) => expect(connector).toBeInstanceOf(Connector));
+    connectorsValues.forEach(connector => expect(connector).toBeInstanceOf(Connector));
   });
 });

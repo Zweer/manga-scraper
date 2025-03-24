@@ -1,4 +1,5 @@
-import { Connector } from './abstract';
+import type { Connector } from './abstract';
+
 import { MangaParkConnector } from './manga-park';
 import { OmegaScansConnector } from './omega-scans';
 

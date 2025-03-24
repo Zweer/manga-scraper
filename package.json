@@ -1,19 +1,22 @@
 {
   "name": "@zweer/manga-scraper",
+  "type": "commonjs",
   "version": "2.0.0",
   "description": "A collection of scrapers for manga websites",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "type": "commonjs",
-  "files": [
-    "lib"
-  ],
+  "author": "Niccolò Olivieri Achille <n.olivieriachille@gmail.com>",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Zweer/manga-scraper.git"
   },
-  "author": "Niccolò Olivieri Achille <n.olivieriachille@gmail.com>",
-  "license": "MIT",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">= 18.17"
+  },
   "scripts": {
     "lint:eslint": "eslint .",
     "lint:prettier": "prettier . --check",
@@ -51,31 +54,29 @@
       "@semantic-release/git"
     ]
   },
-  "engines": {
-    "node": ">= 18.17"
-  },
   "dependencies": {
-    "axios": "^1.7.9",
+    "axios": "^1.8.4",
     "cheerio": "^1.0.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.11.0",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
-    "@shopify/eslint-plugin": "^46.0.0",
-    "@tsconfig/node22": "^22.0.0",
+    "@tsconfig/node22": "^22.0.1",
     "@types/jest": "^29.5.14",
-    "@types/node": "^22.10.7",
+    "@types/node": "^22.13.13",
     "concurrently": "^9.1.2",
+    "eslint": "^9.23.0",
     "jest": "^29.7.0",
     "lockfile-lint": "^4.14.0",
     "ls-engines": "^0.9.3",
-    "prettier": "^3.4.2",
-    "publint": "^0.3.2",
+    "prettier": "^3.5.3",
+    "publint": "^0.3.9",
     "rimraf": "^6.0.1",
-    "semantic-release": "^24.2.1",
-    "ts-jest": "^29.2.5",
+    "semantic-release": "^24.2.3",
+    "ts-jest": "^29.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.8.2"
   },
   "jest": {
     "preset": "ts-jest",
