@@ -4,10 +4,10 @@ import { Connector } from '../abstract';
 import { Manga, Status } from '../../interfaces/manga';
 import { Chapter } from '../../interfaces/chapter';
 
-import { OmegaScansGetMangas } from './interfaces/getMangas';
-import { OmegaScansGetChapters } from './interfaces/getChapters';
-import { OmegaScansGetChapterDetails } from './interfaces/getChapterDetails';
-import { OmegaScansGetManga } from './interfaces/getManga';
+import { GetMangas } from './interfaces/getMangas';
+import { GetChapters } from './interfaces/getChapters';
+import { GetChapterDetails } from './interfaces/getChapterDetails';
+import { GetManga } from './interfaces/getManga';
 
 export class OmegaScansConnector extends Connector {
   static readonly BASE_URL = 'https://omegascans.org';
@@ -20,135 +20,95 @@ export class OmegaScansConnector extends Connector {
     });
   }
 
-  async getMangas(search?: string): Promise<Omit<Manga, 'chapters'>[]> {
-    const mangas: Omit<Manga, 'chapters'>[] = [];
+  async getMangas(search?: string): Promise<Manga[]> {
+    const mangas: Manga[] = [];
 
-    for (let page = 1, run = true; run; page += 1) {
-      const tmpMangas = await this.getMangasFromPage(search, page, true);
-      if (tmpMangas.length > 0) {
-        mangas.push(...tmpMangas);
-      } else {
-        run = false;
+    for (let page = 1; true; page += 1) {
+      const { data } = await this.request.get<GetMangas>('/query', {
+        params: {
+          perPage: 100,
+          page,
+          adult: true,
+          query_string: search,
+        },
+      });
+
+      if (data.data.length === 0) {
+        break;
       }
+
+      mangas.push(
+        ...data.data.map((manga) => ({
+          id: manga.id.toString(),
+          slug: manga.series_slug,
+          title: manga.title,
+          excerpt: manga.description,
+          image: manga.thumbnail,
+          url: `${OmegaScansConnector.BASE_URL}/series/${manga.series_slug}`,
+          releasedAt: new Date(manga.created_at),
+          status: this.matchStatus(manga.status),
+          genres: [],
+          score: manga.rating ?? 0,
+          chaptersCount: manga.free_chapters.length,
+        })),
+      );
     }
 
     return mangas;
   }
 
   async getManga(id: string): Promise<Manga> {
-    const chapters: Chapter[] = [];
-    let mangaSlug = '';
-
-    for (let page = 1, run = true; run; page += 1) {
-      const { chapters: tmpChapters, mangaSlug: tmpMangaSlug } = await this.getChaptersFromPage(
-        id,
-        page,
-      );
-
-      if (!mangaSlug) {
-        mangaSlug = tmpMangaSlug;
-      }
-
-      if (tmpChapters.length > 0) {
-        chapters.push(...tmpChapters);
-      } else {
-        run = false;
-      }
-    }
-
-    const { data } = await this.request.get<OmegaScansGetManga>(`/series/${mangaSlug}`);
+    const slug = await this.getMangaSlug(id);
+    const { data: manga } = await this.request.get<GetManga>(`/series/${slug}`);
 
     return {
-      id: data.id.toString(),
-      title: data.title,
-      excerpt: data.description,
-      image: data.thumbnail,
-      url: `${OmegaScansConnector.BASE_URL}/series/${data.series_slug}`,
-      releasedAt: new Date(data.seasons[0].created_at),
-      status: this.matchStatus(data.status),
-      genres: [],
-      score: data.rating ?? 0,
-      chaptersCount: chapters.length,
-      chapters,
-    };
-  }
-
-  protected async getMangasFromPage(
-    search: string | undefined,
-    page: number,
-    adult: boolean,
-  ): Promise<Omit<Manga, 'chapters'>[]> {
-    const { data } = await this.request.get<OmegaScansGetMangas>('/query', {
-      params: {
-        perPage: 100,
-        page,
-        adult,
-        query_string: search,
-      },
-    });
-
-    return data.data.map((manga) => ({
       id: manga.id.toString(),
+      slug: manga.series_slug,
       title: manga.title,
       excerpt: manga.description,
       image: manga.thumbnail,
       url: `${OmegaScansConnector.BASE_URL}/series/${manga.series_slug}`,
-      releasedAt: new Date(manga.created_at),
+      releasedAt: new Date(manga.seasons[0].created_at ?? `${manga.release_year}-01-01`),
       status: this.matchStatus(manga.status),
       genres: [],
       score: manga.rating ?? 0,
-      chaptersCount: manga.free_chapters.length,
-    }));
+      chaptersCount: parseInt(manga.meta.chapters_count, 10),
+    };
   }
 
-  protected async getChaptersFromPage(
-    id: string,
-    page: number,
-  ): Promise<{ chapters: Chapter[]; mangaSlug: string }> {
-    const { data } = await this.request.get<OmegaScansGetChapters>('/chapter/query', {
-      params: {
-        perPage: 100,
-        page,
-        series_id: id,
-      },
-    });
+  async getChapters(mangaId: string): Promise<Chapter[]> {
+    const chapters = await this.getPartialChapters(mangaId);
 
-    let mangaSlug = '';
-    const chapters = await data.data.reduce(
+    return chapters.reduce(
       async (promiseChapters, chapter) => {
         const chapters = await promiseChapters;
-        const { data } = await this.request.get<OmegaScansGetChapterDetails>(
+        const { data } = await this.request.get<GetChapterDetails>(
           `/chapter/${chapter.series.series_slug}/${chapter.chapter_slug}`,
         );
-
-        if (!mangaSlug) {
-          mangaSlug = chapter.series.series_slug;
-        }
 
         if (data.chapter.price) {
           return chapters;
         }
 
-        chapters.push({
-          id: chapter.id.toString(),
-          title: chapter.chapter_name,
-          index: parseFloat(data.chapter.index),
-          url: `${OmegaScansConnector.BASE_URL}/series/${chapter.series.series_slug}/${chapter.chapter_slug}`,
-          images: data.chapter.chapter_data.images,
-        });
+        chapters.push(this.buildChapter(data));
 
         return chapters;
       },
       Promise.resolve([] as Chapter[]),
     );
-
-    return {
-      chapters,
-      mangaSlug,
-    };
   }
 
-  protected matchStatus(status: OmegaScansGetMangas['data'][number]['status']): Status {
+  async getChapter(mangaId: string, chapterId: string): Promise<Chapter> {
+    const mangaSlug = await this.getMangaSlug(mangaId);
+    const chapterSlug = await this.getChapterSlug(mangaId, chapterId);
+    const { data } = await this.request.get<GetChapterDetails>(
+      `/chapter/${mangaSlug}/${chapterSlug}`,
+    );
+
+    return this.buildChapter(data);
+  }
+
+  protected matchStatus(status: GetMangas['data'][number]['status']): Status {
     switch (status) {
       case 'Ongoing':
         return Status.Ongoing;
@@ -167,12 +127,84 @@ export class OmegaScansConnector extends Connector {
     }
   }
 
-  protected extractIndex(chapter: OmegaScansGetChapters['data'][number]): number {
-    const match = /chapter-(.*)/.exec(chapter.chapter_slug);
-    if (match) {
-      return parseFloat(match[1].replace('-', '.'));
+  protected async getMangaSlug(id: string): Promise<string> {
+    const { data: chapters } = await this.request
+      .get<GetChapters>('/chapter/query', {
+        params: {
+          perPage: 1,
+          page: 1,
+          series_id: id,
+        },
+      })
+      .catch((error) => {
+        if (process.env.NODE_ENV !== 'test') {
+          console.error(error);
+        }
+
+        return { data: { data: [] } };
+      });
+
+    if (chapters.data.length === 0) {
+      throw new Error('Comic not found');
     }
 
-    throw new Error(`Invalid index extraction: ${chapter.chapter_slug}`);
+    return chapters.data[0].series.series_slug;
+  }
+
+  protected async getPartialChapters(mangaId: string): Promise<GetChapters['data']> {
+    const chapters: GetChapters['data'] = [];
+    for (let page = 1; true; page += 1) {
+      const { data } = await this.request
+        .get<GetChapters>('/chapter/query', {
+          params: {
+            perPage: 100,
+            page,
+            series_id: mangaId,
+          },
+        })
+        .catch((error) => {
+          if (process.env.NODE_ENV !== 'test') {
+            console.error(error);
+          }
+
+          return { data: { data: [] } };
+        });
+
+      if (data.data.length === 0) {
+        if (page === 1) {
+          throw new Error('Comic not found');
+        }
+
+        break;
+      }
+
+      chapters.push(...data.data);
+    }
+
+    return chapters;
+  }
+
+  protected async getChapterSlug(mangaId: string, chapterId: string): Promise<string> {
+    const chapters = await this.getPartialChapters(mangaId);
+    const chapter = chapters.find((chapter) => chapter.id.toString() === chapterId);
+
+    if (!chapter) {
+      throw new Error('Chapter not found');
+    }
+
+    return chapter.chapter_slug;
+  }
+
+  protected buildChapter(data: GetChapterDetails): Chapter {
+    return {
+      id: data.chapter.id.toString(),
+      name: data.chapter.chapter_name,
+      slug: data.chapter.chapter_slug,
+      title: data.chapter.chapter_title!,
+      index: parseFloat(data.chapter.index),
+      url: `${OmegaScansConnector.BASE_URL}/series/${data.chapter.series.series_slug}/${data.chapter.chapter_slug}`,
+      releasedAt: new Date(data.chapter.created_at),
+      images: data.chapter.chapter_data.images,
+    };
   }
 }

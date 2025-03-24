@@ -4,71 +4,71 @@ import { Connector } from '../lib/connectors/abstract';
 describe('main', () => {
   it('should export the main interfaces', () => {
     const chapterId = 'id';
-    const chapterImages = ['image-1', 'image-2'];
-    const chapterIndex = 1;
+    const chapterName = 'name';
+    const chapterSlug = 'slug';
     const chapterTitle = 'title';
+    const chapterIndex = 1;
     const chapterUrl = 'url';
     const chapterReleasedAt = new Date();
+    const chapterImages = ['image-1', 'image-2'];
 
     const chapter: Chapter = {
       id: chapterId,
-      images: chapterImages,
-      index: chapterIndex,
+      name: chapterName,
+      slug: chapterSlug,
       title: chapterTitle,
+      index: chapterIndex,
       url: chapterUrl,
       releasedAt: chapterReleasedAt,
+      images: chapterImages,
     };
 
     expect(chapter).toHaveProperty('id', chapterId);
-    expect(chapter).toHaveProperty('images', chapterImages);
-    expect(chapter).toHaveProperty('index', chapterIndex);
+    expect(chapter).toHaveProperty('name', chapterName);
+    expect(chapter).toHaveProperty('slug', chapterSlug);
     expect(chapter).toHaveProperty('title', chapterTitle);
+    expect(chapter).toHaveProperty('index', chapterIndex);
     expect(chapter).toHaveProperty('url', chapterUrl);
     expect(chapter).toHaveProperty('releasedAt', chapterReleasedAt);
+    expect(chapter).toHaveProperty('images', chapterImages);
 
-    const mangaChapters = [chapter];
-    const mangaChaptersCount = 1;
-    const mangaGenres = ['genre-1', 'genre-2'];
     const mangaId = 'id';
-    const mangaStatus = Status.Completed;
+    const mangaSlug = 'slug';
     const mangaTitle = 'title';
-    const mangaUrl = 'url';
     const mangaExcerpt = 'excerpt';
     const mangaImage = 'image';
+    const mangaUrl = 'url';
     const mangaReleasedAt = new Date();
+    const mangaStatus = Status.Completed;
+    const mangaGenres = ['genre-1', 'genre-2'];
     const mangaScore = 10;
+    const mangaChaptersCount = 1;
 
     const manga: Manga = {
-      chapters: mangaChapters,
-      chaptersCount: mangaChaptersCount,
-      genres: mangaGenres,
       id: mangaId,
-      status: mangaStatus,
+      slug: mangaSlug,
       title: mangaTitle,
-      url: mangaUrl,
       excerpt: mangaExcerpt,
       image: mangaImage,
+      url: mangaUrl,
       releasedAt: mangaReleasedAt,
+      status: mangaStatus,
+      genres: mangaGenres,
       score: mangaScore,
+      chaptersCount: mangaChaptersCount,
     };
 
-    expect(manga).toHaveProperty('chapters', mangaChapters);
-    expect(manga).toHaveProperty('chapters.0.id', chapterId);
-    expect(manga).toHaveProperty('chapters.0.images', chapterImages);
-    expect(manga).toHaveProperty('chapters.0.index', chapterIndex);
-    expect(manga).toHaveProperty('chapters.0.title', chapterTitle);
-    expect(manga).toHaveProperty('chapters.0.url', chapterUrl);
-    expect(manga).toHaveProperty('chapters.0.releasedAt', chapterReleasedAt);
-    expect(manga).toHaveProperty('chaptersCount', mangaChaptersCount);
-    expect(manga).toHaveProperty('genres', mangaGenres);
     expect(manga).toHaveProperty('id', mangaId);
-    expect(manga).toHaveProperty('status', mangaStatus);
+    expect(manga).toHaveProperty('slug', mangaSlug);
     expect(manga).toHaveProperty('title', mangaTitle);
-    expect(manga).toHaveProperty('url', mangaUrl);
     expect(manga).toHaveProperty('excerpt', mangaExcerpt);
     expect(manga).toHaveProperty('image', mangaImage);
+    expect(manga).toHaveProperty('url', mangaUrl);
     expect(manga).toHaveProperty('releasedAt', mangaReleasedAt);
+    expect(manga).toHaveProperty('status', mangaStatus);
+    expect(manga).toHaveProperty('genres', mangaGenres);
     expect(manga).toHaveProperty('score', mangaScore);
+    expect(manga).toHaveProperty('chaptersCount', mangaChaptersCount);
   });
 
   it('should export the connectors', () => {

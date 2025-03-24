@@ -7,7 +7,7 @@ interface Season {
   updated_at: string;
 }
 
-export interface OmegaScansGetManga {
+export interface GetManga {
   id: number;
   title: string;
   series_slug: string;

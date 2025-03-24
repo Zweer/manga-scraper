@@ -10,5 +10,5 @@ export abstract class Connector {
   abstract getManga(id: string): Promise<Manga>;
 
   abstract getChapters(mangaId: string): Promise<Chapter[]>;
-  abstract getChapter(chapterId: string): Promise<Chapter>;
+  abstract getChapter(mangaId: string, chapterId: string): Promise<Chapter>;
 }

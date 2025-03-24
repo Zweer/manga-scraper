@@ -93,12 +93,20 @@ describe('connectors -> manga park', () => {
   });
 
   describe('getChapter', () => {
+    it('should retrieve a chapter from a non-existent comic', async () => {
+      await expect(connector.getChapter('non-existent', 'non-existent')).rejects.toThrow(
+        'Chapter not found',
+      );
+    });
+
     it('should retrieve a non-existent comic chapter', async () => {
-      await expect(connector.getChapter('non-existent')).rejects.toThrow('Chapter not found');
+      await expect(connector.getChapter('341963', 'non-existent')).rejects.toThrow(
+        'Chapter not found',
+      );
     });
 
     it('should retrieve the "my illustrator" comic chapter', async () => {
-      const chapter = await connector.getChapter('7895808');
+      const chapter = await connector.getChapter('341963', '7895808');
 
       expect(chapter).toHaveProperty('id', '7895808');
       expect(chapter).toHaveProperty('name', 'Chapter 1');

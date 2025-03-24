@@ -7,7 +7,7 @@ interface MicroChapter {
   meta: object;
 }
 
-export interface OmegaScansGetChapterDetails {
+export interface GetChapterDetails {
   chapter: {
     id: number;
     series_id: number;

@@ -1,4 +1,4 @@
-import { OmegaScansCommonMeta } from './commonMeta';
+import { CommonMeta } from './commonMeta';
 
 interface Chapter {
   id: number;
@@ -19,7 +19,7 @@ interface Chapter {
   };
 }
 
-export interface OmegaScansGetChapters {
+export interface GetChapters {
   data: Chapter[];
-  meta: OmegaScansCommonMeta;
+  meta: CommonMeta;
 }

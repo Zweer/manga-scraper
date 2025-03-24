@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "manga-park"
+        "manga-park",
+        "omega-scans"
     ]
 }

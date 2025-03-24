@@ -1,4 +1,4 @@
-import { OmegaScansCommonMeta } from './commonMeta';
+import { CommonMeta } from './commonMeta';
 
 interface Chapter {
   id: number;
@@ -11,8 +11,8 @@ interface Chapter {
   meta: Record<string, never>;
 }
 
-export interface OmegaScansGetMangas {
-  meta: OmegaScansCommonMeta;
+export interface GetMangas {
+  meta: CommonMeta;
   data: {
     id: number;
     title: string;

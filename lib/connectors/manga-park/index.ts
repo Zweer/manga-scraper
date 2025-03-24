@@ -98,7 +98,7 @@ export class MangaParkConnector extends Connector {
     return data.data.get_comicChapterList.map((chapter) => this.buildChapter(chapter.data));
   }
 
-  async getChapter(chapterId: string): Promise<Chapter> {
+  async getChapter(mangaId: string, chapterId: string): Promise<Chapter> {
     const operationName = 'getChapter';
     const query = graphqlQuery;
     const variables = { chapterId };
