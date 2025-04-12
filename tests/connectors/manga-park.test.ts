@@ -63,8 +63,8 @@ describe('connectors -> manga park', () => {
         'drama',
         'full_color',
       ]);
-      expect(manga).toHaveProperty('score', 8.32);
-      expect(manga).toHaveProperty('chaptersCount', 81);
+      expect(manga).toHaveProperty('score', 8.33);
+      expect(manga).toHaveProperty('chaptersCount', 82);
       expect(manga).not.toHaveProperty('chapters');
     });
   });
@@ -77,7 +77,7 @@ describe('connectors -> manga park', () => {
     it('should retrieve the "my illustrator" comic chapters', async () => {
       const chapters = await connector.getChapters('341963');
 
-      expect(chapters).toHaveLength(81);
+      expect(chapters).toHaveLength(82);
 
       chapters.forEach((chapter) => {
         expect(chapter).toHaveProperty('id', expect.any(String));
