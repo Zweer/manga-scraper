@@ -37,6 +37,8 @@ describe('main', () => {
     const mangaId = 'id';
     const mangaSlug = 'slug';
     const mangaTitle = 'title';
+    const mangaAuthor = 'author';
+    const mangaArtist = 'artist';
     const mangaExcerpt = 'excerpt';
     const mangaImage = 'image';
     const mangaUrl = 'url';
@@ -50,6 +52,8 @@ describe('main', () => {
       id: mangaId,
       slug: mangaSlug,
       title: mangaTitle,
+      author: mangaAuthor,
+      artist: mangaArtist,
       excerpt: mangaExcerpt,
       image: mangaImage,
       url: mangaUrl,
@@ -63,6 +67,8 @@ describe('main', () => {
     expect(manga).toHaveProperty('id', mangaId);
     expect(manga).toHaveProperty('slug', mangaSlug);
     expect(manga).toHaveProperty('title', mangaTitle);
+    expect(manga).toHaveProperty('author', mangaAuthor);
+    expect(manga).toHaveProperty('artist', mangaArtist);
     expect(manga).toHaveProperty('excerpt', mangaExcerpt);
     expect(manga).toHaveProperty('image', mangaImage);
     expect(manga).toHaveProperty('url', mangaUrl);
