@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/Zweer/manga-scraper/compare/v2.0.2...v2.1.0) (2025-04-28)
+
+
+### Features
+
+* :sparkles: Added `author` and `artist` ([8d13833](https://github.com/Zweer/manga-scraper/commit/8d13833b8594a08a2135204a0a225376c2a7eff3))
+
 ## [2.0.2](https://github.com/Zweer/manga-scraper/compare/v2.0.1...v2.0.2) (2025-04-12)
 
 
