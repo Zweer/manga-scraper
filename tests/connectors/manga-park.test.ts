@@ -22,6 +22,8 @@ describe('connectors -> manga park', () => {
       mangas.forEach((manga) => {
         expect(manga).toHaveProperty('id', expect.any(String));
         expect(manga).toHaveProperty('title', expect.any(String));
+        expect(manga).toHaveProperty('author', expect.any(String));
+        expect(manga).toHaveProperty('artist', expect.any(String));
         expect(manga).toHaveProperty('excerpt', expect.any(String));
         expect(manga).toHaveProperty('image', expect.any(String));
         expect(manga).toHaveProperty('url', expect.any(String));
@@ -45,14 +47,13 @@ describe('connectors -> manga park', () => {
 
       expect(manga).toHaveProperty('id', '341963');
       expect(manga).toHaveProperty('title', 'My Illustrator');
-      expect(manga).toHaveProperty('excerpt', expect.any(String));
-      expect(manga).toHaveProperty('image', expect.any(String));
-      expect(manga).toHaveProperty(
-        'url',
-        'https://mangapark.net/title/341963-en-my-illustrator-new',
-      );
+      expect(manga).toHaveProperty('author', 'It is Fall, Nocturnal');
+      expect(manga).toHaveProperty('artist', 'Yooja');
+      expect(manga).toHaveProperty('excerpt', 'A small, dazzling romance between the popular novelist Lee Minho, a junior in the Architecture Department, and his muse; illustrator Han Naeun, begins as they continue their activities as sex partners!');
+      expect(manga).toHaveProperty('image', 'https://mangapark.net/media/mpim/bee/bee09132ed243e2ecb0efc4fc39781ef109f6e68_640_896_45152.webp');
+      expect(manga).toHaveProperty('url', 'https://mangapark.net/title/341963-en-my-illustrator-new');
       expect(manga).toHaveProperty('releasedAt', new Date('2023-03-29T19:54:10.203Z'));
-      expect(manga).toHaveProperty('status', 'Ongoing');
+      expect(manga).toHaveProperty('status', 'Completed');
       expect(manga).toHaveProperty('genres', [
         'mature',
         'romance',
@@ -63,8 +64,8 @@ describe('connectors -> manga park', () => {
         'drama',
         'full_color',
       ]);
-      expect(manga).toHaveProperty('score', 8.33);
-      expect(manga).toHaveProperty('chaptersCount', 82);
+      expect(manga).toHaveProperty('score', 8.29);
+      expect(manga).toHaveProperty('chaptersCount', 83);
       expect(manga).not.toHaveProperty('chapters');
     });
   });
@@ -77,7 +78,7 @@ describe('connectors -> manga park', () => {
     it('should retrieve the "my illustrator" comic chapters', async () => {
       const chapters = await connector.getChapters('341963');
 
-      expect(chapters).toHaveLength(82);
+      expect(chapters).toHaveLength(83);
 
       chapters.forEach((chapter) => {
         expect(chapter).toHaveProperty('id', expect.any(String));

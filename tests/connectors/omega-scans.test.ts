@@ -22,14 +22,16 @@ describe('connectors -> omega scans', () => {
       mangas.forEach((manga) => {
         expect(manga).toHaveProperty('id', '2');
         expect(manga).toHaveProperty('title', 'My Illustrator');
-        expect(manga).toHaveProperty('excerpt', expect.any(String));
-        expect(manga).toHaveProperty('image', expect.any(String));
+        expect(manga).toHaveProperty('author', '');
+        expect(manga).toHaveProperty('artist', '');
+        expect(manga).toHaveProperty('excerpt', '<p>A small, dazzling romance between the popular novelist Lee Minho, a junior in the Architecture Department, and his muse; illustrator Han Naeun, begins as they continue their activities as sex partners!</p>');
+        expect(manga).toHaveProperty('image', 'https://media.omegascans.org/file/zFSsXt/qogvou9dg68hfrsh4cevxpew.webp');
         expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
         expect(manga).toHaveProperty('releasedAt', new Date('2023-03-30T19:19:02.865Z'));
         expect(manga).toHaveProperty('status', 'Ongoing');
         expect(manga).toHaveProperty('genres', []);
         expect(manga).toHaveProperty('score', 0);
-        expect(manga).toHaveProperty('chaptersCount', 82);
+        expect(manga).toHaveProperty('chaptersCount', 83);
         expect(manga).not.toHaveProperty('chapters');
       });
     });
@@ -45,14 +47,16 @@ describe('connectors -> omega scans', () => {
 
       expect(manga).toHaveProperty('id', '2');
       expect(manga).toHaveProperty('title', 'My Illustrator');
-      expect(manga).toHaveProperty('excerpt', expect.any(String));
-      expect(manga).toHaveProperty('image', expect.any(String));
+      expect(manga).toHaveProperty('author', 'Nocturnal & It is Fall');
+      expect(manga).toHaveProperty('artist', 'Toptoon');
+      expect(manga).toHaveProperty('excerpt', '<p>A small, dazzling romance between the popular novelist Lee Minho, a junior in the Architecture Department, and his muse; illustrator Han Naeun, begins as they continue their activities as sex partners!</p>');
+      expect(manga).toHaveProperty('image', 'https://media.omegascans.org/file/zFSsXt/qogvou9dg68hfrsh4cevxpew.webp');
       expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
       expect(manga).toHaveProperty('releasedAt', new Date('2023-04-01T17:51:32.095Z'));
       expect(manga).toHaveProperty('status', 'Ongoing');
       expect(manga).toHaveProperty('genres', []);
       expect(manga).toHaveProperty('score', 0);
-      expect(manga).toHaveProperty('chaptersCount', 82);
+      expect(manga).toHaveProperty('chaptersCount', 83);
       expect(manga).not.toHaveProperty('chapters');
     });
   });
@@ -67,7 +71,7 @@ describe('connectors -> omega scans', () => {
       async () => {
         const chapters = await connector.getChapters('2');
 
-        expect(chapters).toHaveLength(82);
+        expect(chapters).toHaveLength(83);
 
         chapters.forEach((chapter) => {
           expect(chapter).toHaveProperty('id', expect.any(String));

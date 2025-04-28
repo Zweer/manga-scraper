@@ -9,13 +9,15 @@ export enum Status {
 export interface Manga {
   id: string;
   slug: string;
-  title?: string;
+  title: string;
+  author: string;
+  artist: string;
   excerpt?: string;
-  image?: string;
+  image: string;
   url: string;
-  releasedAt?: Date;
+  releasedAt: Date;
   status: Status;
   genres: string[];
-  score?: number;
+  score: number;
   chaptersCount: number;
 }

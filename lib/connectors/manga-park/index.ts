@@ -184,31 +184,45 @@ export class MangaParkConnector extends Connector {
   }
 
   protected buildManga(manga: GetManga['data']['get_comicNode']['data']): Manga {
+    if (!manga) {
+      throw new Error('Manga not found');
+    }
+
+    if (Number.isNaN(manga.dateCreate)) {
+      throw new TypeError('Manga dateCreate not found');
+    }
+
     return {
-      id: manga!.id,
-      slug: manga!.slug!,
-      title: manga!.name!,
-      excerpt: manga!.summary,
-      image: manga!.urlCoverOri,
-      url: `${MangaParkConnector.BASE_URL}${manga!.urlPath}`,
-      releasedAt: typeof manga!.dateCreate === 'number' ? new Date(manga!.dateCreate) : undefined,
-      status: this.matchStatus(manga!.originalStatus),
-      genres: manga!.genres ?? [],
-      score: Math.round((manga!.score_avg ?? 0) * 100) / 100,
-      chaptersCount: (manga!.chaps_normal ?? 0) + (manga!.chaps_others ?? 0),
+      id: manga.id,
+      slug: manga.slug!,
+      title: manga.name!,
+      author: manga.authors?.join(', ') ?? '',
+      artist: manga.artists?.join(', ') ?? '',
+      excerpt: manga.summary,
+      image: `${MangaParkConnector.BASE_URL}${manga.urlCoverOri}`,
+      url: `${MangaParkConnector.BASE_URL}${manga.urlPath}`,
+      releasedAt: new Date(manga.dateCreate!),
+      status: this.matchStatus(manga.originalStatus),
+      genres: manga.genres ?? [],
+      score: Math.round((manga.score_avg ?? 0) * 100) / 100,
+      chaptersCount: (manga.chaps_normal ?? 0) + (manga.chaps_others ?? 0),
     };
   }
 
   protected buildChapter(chapter: GetChapter['data']['get_chapterNode']['data']): Chapter {
+    if (!chapter) {
+      throw new Error('Chapter not found');
+    }
+
     return {
-      id: chapter!.id,
-      name: chapter!.dname!,
-      slug: chapter!.urlPath!.split('/').pop()!,
-      title: chapter!.title,
-      index: chapter!.serial!,
-      url: `${MangaParkConnector.BASE_URL}${chapter!.urlPath!}`,
-      releasedAt: typeof chapter!.dateCreate === 'number' ? new Date(chapter!.dateCreate) : undefined,
-      images: chapter!.imageFile?.urlList ?? [],
+      id: chapter.id,
+      name: chapter.dname!,
+      slug: chapter.urlPath!.split('/').pop()!,
+      title: chapter.title,
+      index: chapter.serial!,
+      url: `${MangaParkConnector.BASE_URL}${chapter.urlPath!}`,
+      releasedAt: typeof chapter.dateCreate === 'number' ? new Date(chapter.dateCreate) : undefined,
+      images: chapter.imageFile?.urlList ?? [],
     };
   }
 
