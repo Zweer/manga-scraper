@@ -5,16 +5,82 @@ import type { GetChapters } from './interfaces/getChapters';
 import type { GetManga } from './interfaces/getManga';
 import type { MangaParkGetMangas } from './interfaces/getMangas';
 
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
-
 import axios from 'axios';
 
 import { Status } from '../../interfaces/manga';
 import { Connector } from '../abstract';
 import { OriginalStatus } from './interfaces/getManga';
 
-const graphqlQuery = readFileSync(join(__dirname, 'queries.graphql'), 'utf8');
+const graphqlQuery = `
+query getMangas($select: SearchComic_Select) {
+  get_searchComic(select: $select) {
+    paging {
+      page
+      pages
+    }
+    items {
+      ...mangaData
+    }
+  }
+}
+
+query getManga($comicId: ID!) {
+  get_comicNode(id: $comicId) {
+    ...mangaData
+  }
+}
+
+query getChapters($comicId: ID!) {
+  get_comicChapterList(comicId: $comicId) {
+    ...chapterData
+  }
+}
+
+query getChapter($chapterId: ID!) {
+  get_chapterNode(id: $chapterId) {
+    ...chapterData
+  }
+}
+
+fragment mangaData on ComicNode {
+  data {
+    artists
+    authors
+    chaps_normal
+    chaps_others
+    dateCreate
+    extraInfo
+    genres
+    id
+    name
+    originalStatus
+    score_avg
+    sfw_result
+    slug
+    summary
+    urlCover300
+    urlCover600
+    urlCover900
+    urlCoverOri
+    urlPath
+  }
+}
+
+fragment chapterData on ChapterNode {
+  data {
+    dateCreate
+    dname
+    id
+    imageFile {
+      urlList
+    }
+    serial
+    sfw_result
+    title
+    urlPath
+  }
+}
+`;
 
 export class MangaParkConnector extends Connector {
   static readonly BASE_URL = 'https://mangapark.net';
