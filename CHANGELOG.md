@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/Zweer/manga-scraper/compare/v2.1.1...v2.1.2) (2025-05-12)
+
+
+### Bug Fixes
+
+* **manga-park:** :rewind: Reverting the graphql migration ([19228fe](https://github.com/Zweer/manga-scraper/commit/19228fe0c2ca15a4ec96dadd8f9182d7c4d65220))
+
 ## [2.1.1](https://github.com/Zweer/manga-scraper/compare/v2.1.0...v2.1.1) (2025-05-12)
 
 
