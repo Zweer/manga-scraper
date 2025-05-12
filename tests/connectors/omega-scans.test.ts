@@ -28,9 +28,9 @@ describe('connectors -> omega scans', () => {
         expect(manga).toHaveProperty('image', 'https://media.omegascans.org/file/zFSsXt/qogvou9dg68hfrsh4cevxpew.webp');
         expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
         expect(manga).toHaveProperty('releasedAt', new Date('2023-03-30T19:19:02.865Z'));
-        expect(manga).toHaveProperty('status', 'Ongoing');
+        expect(manga).toHaveProperty('status', 'Completed');
         expect(manga).toHaveProperty('genres', []);
-        expect(manga).toHaveProperty('score', 0);
+        expect(manga).toHaveProperty('score', 5);
         expect(manga).toHaveProperty('chaptersCount', 83);
         expect(manga).not.toHaveProperty('chapters');
       });
@@ -53,9 +53,9 @@ describe('connectors -> omega scans', () => {
       expect(manga).toHaveProperty('image', 'https://media.omegascans.org/file/zFSsXt/qogvou9dg68hfrsh4cevxpew.webp');
       expect(manga).toHaveProperty('url', 'https://omegascans.org/series/my-illustrator');
       expect(manga).toHaveProperty('releasedAt', new Date('2023-04-01T17:51:32.095Z'));
-      expect(manga).toHaveProperty('status', 'Ongoing');
+      expect(manga).toHaveProperty('status', 'Completed');
       expect(manga).toHaveProperty('genres', []);
-      expect(manga).toHaveProperty('score', 0);
+      expect(manga).toHaveProperty('score', 5);
       expect(manga).toHaveProperty('chaptersCount', 83);
       expect(manga).not.toHaveProperty('chapters');
     });
