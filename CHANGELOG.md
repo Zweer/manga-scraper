@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/Zweer/manga-scraper/compare/v2.1.0...v2.1.1) (2025-05-12)
+
+
+### Performance Improvements
+
+* **manga-park:** :recycle: Moving from string to graphql file + adding trailing slash to `apo` endpoint ([6a8e106](https://github.com/Zweer/manga-scraper/commit/6a8e1065f663de1067dcaad4f7c5659c4bc9231d))
+
 # [2.1.0](https://github.com/Zweer/manga-scraper/compare/v2.0.2...v2.1.0) (2025-04-28)
 
 
