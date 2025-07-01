@@ -24,8 +24,10 @@
     "lint:publish": "publint --strict",
     "lint": "concurrently npm:lint:* --prefixColors auto",
     "check": "npm run lint && npm run format",
-    "test": "jest",
-    "test:debug": "jest --runInBand",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:debug": "vitest run --inspect-brk --threads false",
+    "coverage": "vitest run --coverage",
     "clean": "rimraf --glob ./{lib,tests}/**/*.{d.ts,js}",
     "prebuild": "npm run clean",
     "build": "tsc",
@@ -62,22 +64,17 @@
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
     "@tsconfig/node22": "^22.0.1",
-    "@types/jest": "^29.5.14",
     "@types/node": "^22.13.13",
+    "@vitest/coverage-v8": "^3.2.4",
     "concurrently": "^9.1.2",
     "eslint": "^9.23.0",
-    "jest": "^29.7.0",
     "lockfile-lint": "^4.14.0",
     "ls-engines": "^0.9.3",
     "publint": "^0.3.9",
     "rimraf": "^6.0.1",
     "semantic-release": "^24.2.3",
-    "ts-jest": "^29.3.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node"
+    "typescript": "^5.8.2",
+    "vitest": "^3.2.4"
   }
 }

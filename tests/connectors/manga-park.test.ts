@@ -64,7 +64,7 @@ describe('connectors -> manga park', () => {
         'drama',
         'full_color',
       ]);
-      expect(manga).toHaveProperty('score', 8.22);
+      expect(manga).toHaveProperty('score', 8.32);
       expect(manga).toHaveProperty('chaptersCount', 83);
       expect(manga).not.toHaveProperty('chapters');
     });

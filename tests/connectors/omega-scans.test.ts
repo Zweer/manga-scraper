@@ -66,26 +66,22 @@ describe('connectors -> omega scans', () => {
       await expect(connector.getChapters('non-existent')).rejects.toThrow('Comic not found');
     });
 
-    it(
-      'should retrieve the "my illustrator" comic chapters',
-      async () => {
-        const chapters = await connector.getChapters('2');
+    it('should retrieve the "my illustrator" comic chapters', { timeout: 20000 }, async () => {
+      const chapters = await connector.getChapters('2');
 
-        expect(chapters).toHaveLength(83);
+      expect(chapters).toHaveLength(83);
 
-        chapters.forEach((chapter) => {
-          expect(chapter).toHaveProperty('id', expect.any(String));
-          expect(chapter).toHaveProperty('name', expect.any(String));
-          expect(chapter).toHaveProperty('slug', expect.any(String));
-          expect(chapter).toHaveProperty('title');
-          expect(chapter).toHaveProperty('index', expect.any(Number));
-          expect(chapter).toHaveProperty('url', expect.any(String));
-          expect(chapter).toHaveProperty('releasedAt', expect.any(Date));
-          expect(chapter).toHaveProperty('images', expect.any(Array));
-        });
-      },
-      20 * 1000,
-    );
+      chapters.forEach((chapter) => {
+        expect(chapter).toHaveProperty('id', expect.any(String));
+        expect(chapter).toHaveProperty('name', expect.any(String));
+        expect(chapter).toHaveProperty('slug', expect.any(String));
+        expect(chapter).toHaveProperty('title');
+        expect(chapter).toHaveProperty('index', expect.any(Number));
+        expect(chapter).toHaveProperty('url', expect.any(String));
+        expect(chapter).toHaveProperty('releasedAt', expect.any(Date));
+        expect(chapter).toHaveProperty('images', expect.any(Array));
+      });
+    });
   });
 
   describe('getChapter', () => {
