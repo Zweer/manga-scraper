@@ -1,5 +1,7 @@
 import type { Chapter, ConnectorNames, Manga } from '../lib';
 
+import { describe, expect, it } from 'vitest';
+
 import { connectors, Status } from '../lib';
 import { Connector } from '../lib/connectors/abstract';
 

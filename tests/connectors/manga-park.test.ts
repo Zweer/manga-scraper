@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { MangaParkConnector } from '../../lib/connectors/manga-park';
 
 describe('connectors -> manga park', () => {

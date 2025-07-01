@@ -1,3 +1,5 @@
+import { beforeEach, describe, expect, it } from 'vitest';
+
 import { OmegaScansConnector } from '../../lib/connectors/omega-scans';
 
 describe('connectors -> omega scans', () => {
