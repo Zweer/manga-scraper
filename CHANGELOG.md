@@ -1,3 +1,15 @@
+# [2.2.0](https://github.com/Zweer/manga-scraper/compare/v2.1.2...v2.2.0) (2025-07-01)
+
+
+### Bug Fixes
+
+* :white_check_mark: Not using the global vitest methods ([3d53211](https://github.com/Zweer/manga-scraper/commit/3d53211d335ed26a372427ee57e286a130531198))
+
+
+### Features
+
+* migrate testing library from Jest to Vitest ([1bcac92](https://github.com/Zweer/manga-scraper/commit/1bcac922fdba9a4d74a1c5896149869e0c766f80))
+
 ## [2.1.2](https://github.com/Zweer/manga-scraper/compare/v2.1.1...v2.1.2) (2025-05-12)
 
 
